@@ -1,0 +1,23 @@
+{
+  "name": "backend-api-tests",
+  "version": "1.0.0",
+  "description": "workshop backend tests",
+  "main": "index.js",
+  "scripts": {
+    "test": "test api"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JesusSalinas/Backend-API-Tests.git"
+  },
+  "author": "Jesus Salinas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JesusSalinas/Backend-API-Tests/issues"
+  },
+  "homepage": "https://github.com/JesusSalinas/Backend-API-Tests#readme",
+  "dependencies": {
+    "newman": "^5.2.2",
+    "newman-reporter-htmlextra": "^1.20.1"
+  }
+}
