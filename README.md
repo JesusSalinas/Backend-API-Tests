@@ -6,7 +6,7 @@ Develop and test all the bullets defined from GDL_FullStack QA Certificaition_Ho
 
 ## Setting the project
 
-Clone the repository: `` https://github.com/JesusSalinas/TestCafe.git `` and install: 
+Clone the repository: `` https://github.com/JesusSalinas/Backend-API-Tests.git `` and install: 
 
     -  npm install newman
     -  npm install dotenv 
