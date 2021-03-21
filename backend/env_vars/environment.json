@@ -4,17 +4,32 @@
 	"values": [
 		{
 			"key": "token",
-			"value": "5ac8f18efcb63e51321f6e01a9640908e8061f18",
+			"value": "",
 			"enabled": true
 		},
 		{
 			"key": "api",
-			"value": "https://api.todoist.com/rest/v1/tasks",
+			"value": "",
 			"enabled": true
 		},
 		{
 			"key": "projectId",
 			"value": "2260972332",
+			"enabled": true
+		},
+		{
+			"key": "averageResponseTime",
+			"value": "500",
+			"enabled": true
+		},
+		{
+			"key": "idActiveTask",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "newIdTask",
+			"value": "",
 			"enabled": true
 		}
 	],

@@ -8,13 +8,19 @@ newman.run({
     iterationCount: 3,
     iterationData: [
         { 
-            "newName": "Increase goals"
+            "newName": "Increase goals",
+            "updateName": "Hire coach",
+            "priority": 2
         },
         { 
-            "newName": "Increase wins"
+            "newName": "Increase wins",
+            "updateName": "Increase salary",
+            "priority": 3
         },
         { 
-            "newName": "Hire players"
+            "newName": "Hire players",
+            "updateName": "Skip the press",
+            "priority": 2
         }
     ],
     environment: {
@@ -37,13 +43,8 @@ newman.run({
                 "enabled": true
             },
             {
-                "key": "invalidProjectId",
-                "value": "SDGRWG2345",
-                "enabled": true
-            },
-            {
                 "key": "averageResponseTime",
-                "value": "300",
+                "value": "500",
                 "enabled": true
             },
             {
@@ -52,8 +53,8 @@ newman.run({
                 "enabled": true
             },
             {
-                "key": "idInactiveTask",
-                "value": "2000000000",
+                "key": "newIdTask",
+                "value": "",
                 "enabled": true
             }
         ],
@@ -68,18 +69,7 @@ newman.run({
             browserTitle: "NEWMAN REPORT",
             title: "WORKSHOP WIZELINE",
             titleSize: 4,
-            omitHeaders: false,
-            // skipHeaders: "Authorization",
-            // hideRequestBody: ["Login"],
-            // hideResponseBody: ["Auth Request"],
-            // showEnvironmentData: true,
-            // skipEnvironmentVars: ["API_KEY"],
-            // showGlobalData: true,
-            // skipGlobalVars: ["API_TOKEN"],
-            // skipSensitiveData: true,
-            // showMarkdownLinks: true,
-            // showFolderDescription: true,
-            // timezone: "Australia/Sydney"
+            omitHeaders: true
         }
     }
 }).on('start', function (err, args) { // on start of run, log to console

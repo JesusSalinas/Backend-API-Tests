@@ -27,7 +27,6 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"const average = parseInt(pm.environment.get(\"averageResponseTime\"));",
 											"var jsonData = pm.response.json();",
 											"var schema = {",
 											"    \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
@@ -79,10 +78,6 @@
 											"    }",
 											"};",
 											"",
-											"pm.test(\"Response time is into the average\", function () {",
-											"    pm.expect(pm.response.responseTime).to.be.below(average);",
-											"});",
-											"",
 											"pm.test(\"Response headers are correct\", function () {",
 											"    pm.response.to.have.header(\"Content-Type\");",
 											"    pm.response.to.have.header(\"Date\");",
@@ -112,26 +107,6 @@
 										{
 											"key": "project_id",
 											"value": "{{projectId}}"
-										},
-										{
-											"key": "label_id",
-											"value": "",
-											"disabled": true
-										},
-										{
-											"key": "filter",
-											"value": "",
-											"disabled": true
-										},
-										{
-											"key": "lang",
-											"value": "",
-											"disabled": true
-										},
-										{
-											"key": "ids",
-											"value": "",
-											"disabled": true
 										}
 									]
 								}
@@ -187,26 +162,6 @@
 										{
 											"key": "project_id",
 											"value": ""
-										},
-										{
-											"key": "label_id",
-											"value": "",
-											"disabled": true
-										},
-										{
-											"key": "filter",
-											"value": "dsv",
-											"disabled": true
-										},
-										{
-											"key": "lang",
-											"value": "",
-											"disabled": true
-										},
-										{
-											"key": "ids",
-											"value": "",
-											"disabled": true
 										}
 									]
 								}
@@ -250,7 +205,6 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"const average = parseInt(pm.environment.get(\"averageResponseTime\"));",
 											"var jsonData = pm.response.json();",
 											"var schema = {",
 											"    \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
@@ -298,10 +252,6 @@
 											"    },",
 											"    \"required\": [\"id\", \"assigner\", \"project_id\"]",
 											"};",
-											"",
-											"pm.test(\"Response time is into the average\", function () {",
-											"    pm.expect(pm.response.responseTime).to.be.below(average);",
-											"});",
 											"",
 											"pm.test(\"Response headers are correct\", function () {",
 											"    pm.response.to.have.header(\"Content-Type\");",
@@ -351,6 +301,10 @@
 										"exec": [
 											"pm.test(\"Id task it was not found\", function () {",
 											"    pm.expect(pm.response.code).to.be.oneOf([404]);",
+											"});",
+											"",
+											"pm.test(\"Page not found\", function () {",
+											"    pm.response.to.have.body(\"404 page not found\\n\");",
 											"});"
 										],
 										"type": "text/javascript"
@@ -361,13 +315,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{api}}/tasks/{{idInactiveTask}}",
+									"raw": "{{api}}/tasks/BFGR",
 									"host": [
 										"{{api}}"
 									],
 									"path": [
 										"tasks",
-										"{{idInactiveTask}}"
+										"BFGR"
 									]
 								}
 							},
@@ -394,7 +348,6 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"const average = parseInt(pm.environment.get(\"averageResponseTime\"));",
 											"var newTask = pm.variables.get(\"newName\");",
 											"var jsonData = pm.response.json();",
 											"var schema = {",
@@ -444,10 +397,6 @@
 											"    \"required\": [\"id\", \"assigner\", \"project_id\"]",
 											"};",
 											"",
-											"pm.test(\"Response time is into the average\", function () {",
-											"    pm.expect(pm.response.responseTime).to.be.below(average);",
-											"});",
-											"",
 											"pm.test(\"Response headers are correct\", function () {",
 											"    pm.response.to.have.header(\"Content-Type\");",
 											"    pm.response.to.have.header(\"Date\");",
@@ -460,7 +409,9 @@
 											"",
 											"pm.test (\"Content is correct\", function (){",
 											"    pm.expect(jsonData.content).to.eql(newTask);",
-											"});"
+											"});",
+											"",
+											"pm.environment.set(\"newIdTask\", jsonData.id);"
 										],
 										"type": "text/javascript"
 									}
@@ -471,7 +422,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"content\": \"{{newName}}\",\n    \"due_string\": \"tomorrow at 12:00\",\n    \"due_lang\": \"en\",\n    \"priority\": 1,\n    \"project_id\": 2261254215\n}",
+									"raw": "{\n    \"content\": \"{{newName}}\",\n    \"due_string\": \"tomorrow at 12:00\",\n    \"due_lang\": \"en\",\n    \"priority\": 1,\n    \"project_id\": {{projectId}}\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -539,6 +490,337 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Update a task",
+					"item": [
+						{
+							"name": "Update Task Positive",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response headers are correct\", function () {",
+											"    pm.response.to.have.header(\"Date\");",
+											"    pm.response.to.have.header(\"Connection\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"content\": \"{{updateName}}\",\n    \"priority\": {{priority}}\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api}}/tasks/{{newIdTask}}",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"tasks",
+										"{{newIdTask}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Task Negative",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Bad request invalid ID task\", function () {",
+											"    pm.response.to.have.body(\"Invalid id\\n\");",
+											"});",
+											"",
+											"pm.test(\"Bad request code status 400\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"content\": \"no required\",\n    \"priority\": 4\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api}}/tasks/000000",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"tasks",
+										"000000"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Close a task",
+					"item": [
+						{
+							"name": "Close Task Positive",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response headers are correct\", function () {",
+											"    pm.response.to.have.header(\"Date\");",
+											"    pm.response.to.have.header(\"Connection\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{api}}/tasks/{{newIdTask}}/close",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"tasks",
+										"{{newIdTask}}",
+										"close"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Close Task Negative",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Bad request invalid ID task\", function () {",
+											"    pm.response.to.have.body(\"Invalid id\\n\");",
+											"});",
+											"",
+											"pm.test(\"Bad request code status 400\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{api}}/tasks/00000/close",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"tasks",
+										"00000",
+										"close"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Reopen a task",
+					"item": [
+						{
+							"name": "Reopen Task Positive",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response headers are correct\", function () {",
+											"    pm.response.to.have.header(\"Date\");",
+											"    pm.response.to.have.header(\"Connection\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{api}}/tasks/{{newIdTask}}/reopen",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"tasks",
+										"{{newIdTask}}",
+										"reopen"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reopen Task Negative",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Bad request invalid ID task\", function () {",
+											"    pm.response.to.have.body(\"Invalid id\\n\");",
+											"});",
+											"",
+											"pm.test(\"Bad request code status 400\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{api}}/tasks/00000/reopen",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"tasks",
+										"00000",
+										"reopen"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete a task",
+					"item": [
+						{
+							"name": "Delete Task Positive",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response headers are correct\", function () {",
+											"    pm.response.to.have.header(\"Date\");",
+											"    pm.response.to.have.header(\"Connection\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{api}}/tasks/{{newIdTask}}",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"tasks",
+										"{{newIdTask}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Task Negative",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Bad request invalid ID task\", function () {",
+											"    pm.response.to.have.body(\"Invalid id\\n\");",
+											"});",
+											"",
+											"pm.test(\"Bad request code status 400\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{api}}/tasks/000000",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"tasks",
+										"000000"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
@@ -581,8 +863,15 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
+					"const average = parseInt(pm.environment.get(\"averageResponseTime\"));",
+					"",
+					"",
 					"pm.test(\"Status code is 2XX\", function () {",
 					"    pm.response.to.be.success;",
+					"});",
+					"",
+					"pm.test(\"Response time is into the average\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(average);",
 					"});"
 				]
 			}
