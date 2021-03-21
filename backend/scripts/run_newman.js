@@ -5,7 +5,18 @@ dotenv.config();
 newman.run({
     collection: './backend/collections/tasks.json', 
     reporters: ['htmlextra'],
-    iterationCount: 1,
+    iterationCount: 3,
+    iterationData: [
+        { 
+            "newName": "Increase goals"
+        },
+        { 
+            "newName": "Increase wins"
+        },
+        { 
+            "newName": "Hire players"
+        }
+    ],
     environment: {
         "id": "bd65ffff-6443-41b1-832f-bd33940330ec",
         "name": "integration",
@@ -24,6 +35,26 @@ newman.run({
                 "key": "projectId",
                 "value": "2260972332",
                 "enabled": true
+            },
+            {
+                "key": "invalidProjectId",
+                "value": "SDGRWG2345",
+                "enabled": true
+            },
+            {
+                "key": "averageResponseTime",
+                "value": "300",
+                "enabled": true
+            },
+            {
+                "key": "idActiveTask",
+                "value": "",
+                "enabled": true
+            },
+            {
+                "key": "idInactiveTask",
+                "value": "2000000000",
+                "enabled": true
             }
         ],
         "_postman_variable_scope": "environment",
@@ -36,8 +67,8 @@ newman.run({
             logs: true,
             browserTitle: "NEWMAN REPORT",
             title: "WORKSHOP WIZELINE",
-            titleSize: 4
-            // omitHeaders: true,
+            titleSize: 4,
+            omitHeaders: false,
             // skipHeaders: "Authorization",
             // hideRequestBody: ["Login"],
             // hideResponseBody: ["Auth Request"],

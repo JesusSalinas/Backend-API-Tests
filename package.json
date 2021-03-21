@@ -4,7 +4,7 @@
   "description": "workshop backend tests",
   "main": "index.js",
   "scripts": {
-    "test": "node ./backend/scripts/run_newman.js"
+    "tests": "node ./backend/scripts/run_newman.js"
   },
   "repository": {
     "type": "git",
